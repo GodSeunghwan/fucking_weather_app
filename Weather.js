@@ -1,14 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
 import React from "react";
 import { StyleSheet, Text, View } from 'react-native';
 import PropTypes from "prop-types";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function Weather({ temp, condition }) {
     return (
         <View style={styles.container}>
-            <Text>{temp}</Text>
-            <Text>{condition}</Text>
-            <StatusBar />
+            <View style={styles.halfContainer}>
+                <MaterialCommunityIcons name="weather-night" size={128}></MaterialCommunityIcons>
+                <Text style={styles.temp}>{temp}℃</Text>
+            </View>
+            <View style={styles.halfContainer}>
+            </View>
         </View>
     );
 }
@@ -23,5 +26,13 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center"
+    },
+    halfContainer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    temp: {
+        fontSize: 32
     }
 });
