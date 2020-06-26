@@ -1,7 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, Alert } from 'react-native';
+import { Alert } from 'react-native';
 import Loading from "./Loading";
+import Weather from './Weather';
 import * as Location from "expo-location";
 import axios from "axios";
 
@@ -13,8 +13,9 @@ export default class extends React.Component {
   }
 
   getWeather = async (latitude, longitude) => {
-    const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`);
+    const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`);
     console.log(data);
+    this.setState({ isLoading: false, temp: data.main.temp });
   }
 
   getPosition = async () => {
@@ -22,7 +23,6 @@ export default class extends React.Component {
       await Location.requestPermissionsAsync();
       const { coords: { latitude, longitude } } = await Location.getCurrentPositionAsync();
       await this.getWeather(latitude, longitude);
-      this.setState({ isLoading: false });
     } catch (error) {
       Alert.alert("이 앱이 사용자의 위치를 찾을 수 없습니다.", "설정 > Expo > 위치 > 위치 정보 허용");
     }
@@ -33,7 +33,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { isLoading } = this.state;
-    return isLoading ? <Loading /> : null;
+    const { isLoading, temp } = this.state;
+    return isLoading ? <Loading /> : <Weather temp={Math.round(temp)} />;
   }
 }
